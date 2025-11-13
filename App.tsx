@@ -12,7 +12,7 @@ import { ThemeToggle } from "./components/ThemeToggle";
 import { Flag, Lightbulb, Trophy, LeaderboardIcon, EmojiIcon } from "./components/icons";
 import { GameState } from "./types";
 
-const TOTAL_TIME = 6 * 60; // 6 minutes in seconds
+const TOTAL_TIME = 7 * 60; // 7 minutes in seconds
 const QUESTIONS_PER_SECTION = 10;
 
 const App: React.FC = () => {
@@ -146,7 +146,7 @@ const App: React.FC = () => {
         {gameState === "riddles_intro" && (
           <SectionIntro
             title="Section 2: IT Riddles"
-            description="Read the brain-teaser and type the single-word answer. Spelling counts! You have 2 minutes for this section."
+            description="Read the brain-teaser and type the single-word answer. Spelling counts! You have 3 minutes for this section."
             icon={<Lightbulb className="h-16 w-16 text-accent" />}
             onStart={() => setGameState("riddles")}
             accentColor="accent"
@@ -181,7 +181,7 @@ const App: React.FC = () => {
             onComplete={handleRiddlesComplete} 
             onScoreUpdate={setRiddlesScore} 
             questionCount={QUESTIONS_PER_SECTION} 
-            timeLimit={2 * 60}
+            timeLimit={3 * 60}
           />
         )}
 

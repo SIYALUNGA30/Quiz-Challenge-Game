@@ -21,10 +21,10 @@ export const GameRules: React.FC<GameRulesProps> = ({ onConfirm }) => {
         <div className="text-left space-y-4 bg-muted dark:bg-dark-muted p-6 rounded-lg">
           <p>The challenge consists of <strong className="text-primary">3 sections</strong>: Flags, Riddles, and Emojis.</p>
           <div>
-            <p>You have a total of <strong className="text-primary">6 minutes</strong>, broken down as follows:</p>
+            <p>You have a total of <strong className="text-primary">7 minutes</strong>, broken down as follows:</p>
             <ul className="list-disc list-inside pl-4 mt-2 space-y-1">
               <li>Section 1 (Flags): <strong className="text-primary">2 minutes</strong></li>
-              <li>Section 2 (Riddles): <strong className="text-primary">2 minutes</strong></li>
+              <li>Section 2 (Riddles): <strong className="text-primary">3 minutes</strong></li>
               <li>Section 3 (Emojis): <strong className="text-primary">2 minutes</strong></li>
             </ul>
           </div>
