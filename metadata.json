@@ -1,0 +1,5 @@
+{
+  "name": "Gemini Quiz Challenge",
+  "description": "A timed quiz application that tests your knowledge on country flags and IT riddles, powered by the Gemini API to generate dynamic questions.",
+  "requestFramePermissions": []
+}
