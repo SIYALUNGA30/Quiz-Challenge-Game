@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { generateEmojiQuestions } from '../services/geminiService.js';
+import { generateFlagQuestions } from '../services/geminiService.js';
 import { Card } from './ui/Card.js';
 import { Button } from './ui/Button.js';
 import { Timer } from './Timer.js';
 import { CheckCircle, XCircle } from './icons.js';
 
-export const EmojiSection = ({ onComplete, onScoreUpdate, questionCount, timeLimit }) => {
+export const FlagSection = ({ onComplete, onScoreUpdate, questionCount, timeLimit }) => {
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -18,16 +18,17 @@ export const EmojiSection = ({ onComplete, onScoreUpdate, questionCount, timeLim
     setLoading(true);
     setError(null);
     try {
-      const data = await generateEmojiQuestions(questionCount);
-       if (data && data.length > 0) {
+      const data = await generateFlagQuestions(questionCount);
+      if (data && data.length > 0) {
         setQuestions(data);
       } else {
-        throw new Error("No emoji puzzles returned from API.");
+        throw new Error("No questions returned from API.");
       }
     } catch (err) {
-      setError("Failed to load emoji puzzles. Using fallback data.");
+      setError("Failed to load flag questions. Using fallback data.");
       console.error(err);
-      const fallbackData = await generateEmojiQuestions(questionCount);
+      // Fallback data is now handled inside the service
+      const fallbackData = await generateFlagQuestions(questionCount);
       setQuestions(fallbackData);
     } finally {
       setLoading(false);
@@ -37,7 +38,7 @@ export const EmojiSection = ({ onComplete, onScoreUpdate, questionCount, timeLim
   useEffect(() => {
     fetchQuestions();
   }, [fetchQuestions]);
-  
+
   const handleAnswer = (answer) => {
     if (isAnswered) return;
     setSelectedAnswer(answer);
@@ -62,17 +63,17 @@ export const EmojiSection = ({ onComplete, onScoreUpdate, questionCount, timeLim
   if (loading) {
     return (
         React.createElement("div", { className: "flex flex-col items-center justify-center text-center p-8 animate-scale-in" },
-            React.createElement("div", { className: "w-16 h-16 border-4 border-dashed rounded-full animate-spin border-yellow-500" }),
-            React.createElement("h2", { className: "text-2xl font-semibold mt-4" }, "Decoding Emojis..."),
-            React.createElement("p", { className: "text-muted-foreground dark:text-dark-muted-foreground" }, "The AI is creating pictographic puzzles for you!")
+            React.createElement("div", { className: "w-16 h-16 border-4 border-dashed rounded-full animate-spin border-primary" }),
+            React.createElement("h2", { className: "text-2xl font-semibold mt-4" }, "Generating Flag Questions..."),
+            React.createElement("p", { className: "text-muted-foreground dark:text-dark-muted-foreground" }, "Please wait while our AI prepares your challenge!")
         )
     );
   }
 
-   if (error && questions.length === 0) {
+  if (error && questions.length === 0) {
     return React.createElement("div", { className: "text-center text-red-500" }, error);
   }
-
+  
   if (questions.length === 0) return null;
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -89,17 +90,21 @@ export const EmojiSection = ({ onComplete, onScoreUpdate, questionCount, timeLim
       React.createElement(Card, { className: "p-6 md:p-8 max-w-3xl mx-auto" },
         React.createElement("div", { className: "mb-4" },
           React.createElement("div", { className: "flex justify-between mb-2" },
-              React.createElement("h2", { className: "text-xl font-bold text-yellow-500" }, "Emoji Decoder"),
+              React.createElement("h2", { className: "text-xl font-bold text-primary" }, "Flag Challenge"),
               React.createElement("p", { className: "text-lg font-semibold" }, `${currentQuestionIndex + 1} / ${questions.length}`)
           ),
           React.createElement("div", { className: "w-full bg-muted dark:bg-dark-muted rounded-full h-2.5" },
-              React.createElement("div", { className: "bg-yellow-500 h-2.5 rounded-full", style: { width: `${progress}%` } })
+              React.createElement("div", { className: "bg-primary h-2.5 rounded-full", style: { width: `${progress}%` } })
           )
         ),
-
-        React.createElement("div", { className: "text-center space-y-6 mt-6" },
-          React.createElement("p", { className: "text-6xl font-medium leading-relaxed tracking-widest" }, currentQuestion.emojis),
-          
+        
+        React.createElement("div", { className: "text-center space-y-6" },
+          React.createElement("p", { className: "text-2xl font-semibold" }, "Which country's flag is this?"),
+          React.createElement("img", {
+            src: `https://flagcdn.com/w320/${currentQuestion.countryCode.toLowerCase()}.png`,
+            alt: "Country Flag",
+            className: "mx-auto h-48 border-4 border-muted dark:border-dark-muted rounded-lg object-contain"
+          }),
           React.createElement("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4" },
             currentQuestion.options.map((option) => {
               const isCorrect = option === currentQuestion.correctAnswer;
@@ -135,7 +140,7 @@ export const EmojiSection = ({ onComplete, onScoreUpdate, questionCount, timeLim
                   selectedAnswer === currentQuestion.correctAnswer ? "Correct!" : `Sorry, the correct answer was ${currentQuestion.correctAnswer}.`
               ),
               React.createElement(Button, { onClick: handleNext, className: "bg-primary hover:bg-primary/90 text-primary-foreground", size: "lg" },
-                currentQuestionIndex < questions.length - 1 ? 'Next Puzzle' : 'Finish Challenge'
+                currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'Finish Section'
               )
             )
           )
