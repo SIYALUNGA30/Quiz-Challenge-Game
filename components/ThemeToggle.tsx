@@ -1,13 +1,9 @@
 import React from 'react';
-import { useTheme } from '../contexts/ThemeContext';
-import { Button } from './ui/Button';
-import { SunIcon, MoonIcon } from './icons';
+import { useTheme } from '../contexts/ThemeContext.js';
+import { Button } from './ui/Button.js';
+import { SunIcon, MoonIcon } from './icons.js';
 
-interface ThemeToggleProps {
-  className?: string;
-}
-
-export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className }) => {
+export const ThemeToggle = ({ className }) => {
   const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
@@ -15,18 +11,16 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className }) => {
   };
 
   return (
-    <Button
-      onClick={toggleTheme}
-      variant="outline"
-      size="sm"
-      className={`p-2 w-10 h-10 rounded-full ${className}`}
-      aria-label="Toggle theme"
-    >
-      {theme === 'dark' ? (
-        <SunIcon className="h-5 w-5" />
-      ) : (
-        <MoonIcon className="h-5 w-5" />
-      )}
-    </Button>
+    React.createElement(Button, {
+      onClick: toggleTheme,
+      variant: "outline",
+      size: "sm",
+      className: `p-2 w-10 h-10 rounded-full ${className}`,
+      "aria-label": "Toggle theme"
+    },
+      theme === 'dark' ? 
+        React.createElement(SunIcon, { className: "h-5 w-5" }) : 
+        React.createElement(MoonIcon, { className: "h-5 w-5" })
+    )
   );
 };

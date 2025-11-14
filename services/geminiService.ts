@@ -1,9 +1,8 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { FlagQuestion, Riddle, EmojiQuestion } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
-export const generateFlagQuestions = async (count: number): Promise<FlagQuestion[]> => {
+export const generateFlagQuestions = async (count) => {
   try {
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
@@ -27,7 +26,7 @@ export const generateFlagQuestions = async (count: number): Promise<FlagQuestion
     });
 
     const parsedResponse = JSON.parse(response.text);
-    return parsedResponse as FlagQuestion[];
+    return parsedResponse;
   } catch (error) {
     console.error("Error generating flag questions:", error);
     // Provide fallback data in case of API error
@@ -46,7 +45,7 @@ export const generateFlagQuestions = async (count: number): Promise<FlagQuestion
   }
 };
 
-export const generateRiddles = async (count: number): Promise<Riddle[]> => {
+export const generateRiddles = async (count) => {
   try {
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
@@ -68,7 +67,7 @@ export const generateRiddles = async (count: number): Promise<Riddle[]> => {
     });
 
     const parsedResponse = JSON.parse(response.text);
-    return parsedResponse as Riddle[];
+    return parsedResponse;
   } catch (error) {
     console.error("Error generating riddles:", error);
     // Provide fallback data in case of API error
@@ -87,7 +86,7 @@ export const generateRiddles = async (count: number): Promise<Riddle[]> => {
   }
 };
 
-export const generateEmojiQuestions = async (count: number): Promise<EmojiQuestion[]> => {
+export const generateEmojiQuestions = async (count) => {
     try {
       const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
@@ -110,7 +109,7 @@ export const generateEmojiQuestions = async (count: number): Promise<EmojiQuesti
       });
   
       const parsedResponse = JSON.parse(response.text);
-      return parsedResponse as EmojiQuestion[];
+      return parsedResponse;
     } catch (error) {
       console.error("Error generating emoji questions:", error);
       // Provide fallback data in case of API error

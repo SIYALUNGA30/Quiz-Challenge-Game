@@ -1,27 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { generateRiddles } from '../services/geminiService';
-import { Riddle } from '../types';
-import { Card } from './ui/Card';
-import { Button } from './ui/Button';
-import { Timer } from './Timer';
-import { CheckCircle, XCircle } from './icons';
+import { generateRiddles } from '../services/geminiService.js';
+import { Card } from './ui/Card.js';
+import { Button } from './ui/Button.js';
+import { Timer } from './Timer.js';
+import { CheckCircle, XCircle } from './icons.js';
 
-interface RiddlesSectionProps {
-  onComplete: (score: number) => void;
-  onScoreUpdate: (score: number) => void;
-  questionCount: number;
-  timeLimit: number;
-}
-
-export const RiddlesSection: React.FC<RiddlesSectionProps> = ({ onComplete, onScoreUpdate, questionCount, timeLimit }) => {
-  const [riddles, setRiddles] = useState<Riddle[]>([]);
+export const RiddlesSection = ({ onComplete, onScoreUpdate, questionCount, timeLimit }) => {
+  const [riddles, setRiddles] = useState([]);
   const [currentRiddleIndex, setCurrentRiddleIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [loading, setLoading] = useState(true);
   const [userAnswer, setUserAnswer] = useState('');
   const [isAnswered, setIsAnswered] = useState(false);
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [isCorrect, setIsCorrect] = useState(null);
+  const [error, setError] = useState(null);
 
   const fetchRiddles = useCallback(async () => {
     setLoading(true);
@@ -47,7 +39,7 @@ export const RiddlesSection: React.FC<RiddlesSectionProps> = ({ onComplete, onSc
     fetchRiddles();
   }, [fetchRiddles]);
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (isAnswered) return;
     
@@ -77,16 +69,16 @@ export const RiddlesSection: React.FC<RiddlesSectionProps> = ({ onComplete, onSc
 
   if (loading) {
     return (
-        <div className="flex flex-col items-center justify-center text-center p-8 animate-scale-in">
-            <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-accent"></div>
-            <h2 className="text-2xl font-semibold mt-4">Crafting Clever Riddles...</h2>
-            <p className="text-muted-foreground dark:text-dark-muted-foreground">Our AI is thinking up some brain-teasers for you!</p>
-        </div>
+        React.createElement("div", { className: "flex flex-col items-center justify-center text-center p-8 animate-scale-in" },
+            React.createElement("div", { className: "w-16 h-16 border-4 border-dashed rounded-full animate-spin border-accent" }),
+            React.createElement("h2", { className: "text-2xl font-semibold mt-4" }, "Crafting Clever Riddles..."),
+            React.createElement("p", { className: "text-muted-foreground dark:text-dark-muted-foreground" }, "Our AI is thinking up some brain-teasers for you!")
+        )
     );
   }
 
    if (error && riddles.length === 0) {
-    return <div className="text-center text-red-500">{error}</div>;
+    return React.createElement("div", { className: "text-center text-red-500" }, error);
   }
 
   if (riddles.length === 0) return null;
@@ -95,55 +87,55 @@ export const RiddlesSection: React.FC<RiddlesSectionProps> = ({ onComplete, onSc
   const progress = ((currentRiddleIndex + 1) / riddles.length) * 100;
 
   return (
-    <div className="animate-scale-in">
-       <div className="mb-8">
-        <Timer 
-          totalSeconds={timeLimit} 
-          onTimeUp={() => onComplete(score)}
-        />
-      </div>
-      <Card className="p-6 md:p-8 max-w-3xl mx-auto">
-        <div className="mb-4">
-          <div className="flex justify-between mb-2">
-              <h2 className="text-xl font-bold text-accent">IT Riddle Time</h2>
-              <p className="text-lg font-semibold">{currentRiddleIndex + 1} / {riddles.length}</p>
-          </div>
-          <div className="w-full bg-muted dark:bg-dark-muted rounded-full h-2.5">
-              <div className="bg-accent h-2.5 rounded-full" style={{ width: `${progress}%` }}></div>
-          </div>
-        </div>
+    React.createElement("div", { className: "animate-scale-in" },
+       React.createElement("div", { className: "mb-8" },
+        React.createElement(Timer, { 
+          totalSeconds: timeLimit, 
+          onTimeUp: () => onComplete(score)
+        })
+      ),
+      React.createElement(Card, { className: "p-6 md:p-8 max-w-3xl mx-auto" },
+        React.createElement("div", { className: "mb-4" },
+          React.createElement("div", { className: "flex justify-between mb-2" },
+              React.createElement("h2", { className: "text-xl font-bold text-accent" }, "IT Riddle Time"),
+              React.createElement("p", { className: "text-lg font-semibold" }, `${currentRiddleIndex + 1} / ${riddles.length}`)
+          ),
+          React.createElement("div", { className: "w-full bg-muted dark:bg-dark-muted rounded-full h-2.5" },
+              React.createElement("div", { className: "bg-accent h-2.5 rounded-full", style: { width: `${progress}%` } })
+          )
+        ),
 
-        <div className="text-center space-y-6 mt-6">
-          <p className="text-2xl font-medium leading-relaxed">"{currentRiddle.riddle}"</p>
+        React.createElement("div", { className: "text-center space-y-6 mt-6" },
+          React.createElement("p", { className: "text-2xl font-medium leading-relaxed" }, `"${currentRiddle.riddle}"`),
           
-          {!isAnswered ? (
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
-              <input
-                type="text"
-                value={userAnswer}
-                onChange={(e) => setUserAnswer(e.target.value)}
-                placeholder="Your answer..."
-                className="flex-grow w-full px-4 py-3 bg-muted dark:bg-dark-muted border border-muted-foreground/30 dark:border-dark-muted-foreground/30 rounded-md focus:ring-2 focus:ring-accent focus:outline-none"
-                autoFocus
-              />
-              <Button type="submit" className="bg-accent text-accent-foreground hover:bg-accent/90" size="lg">
-                Submit
-              </Button>
-            </form>
+          !isAnswered ? (
+            React.createElement("form", { onSubmit: handleSubmit, className: "flex flex-col sm:flex-row gap-2" },
+              React.createElement("input", {
+                type: "text",
+                value: userAnswer,
+                onChange: (e) => setUserAnswer(e.target.value),
+                placeholder: "Your answer...",
+                className: "flex-grow w-full px-4 py-3 bg-muted dark:bg-dark-muted border border-muted-foreground/30 dark:border-dark-muted-foreground/30 rounded-md focus:ring-2 focus:ring-accent focus:outline-none",
+                autoFocus: true
+              }),
+              React.createElement(Button, { type: "submit", className: "bg-accent text-accent-foreground hover:bg-accent/90", size: "lg" },
+                "Submit"
+              )
+            )
           ) : (
-            <div className="flex flex-col items-center space-y-4 p-4 rounded-lg bg-muted dark:bg-dark-muted">
-              <div className="flex items-center gap-2 text-xl">
-                {isCorrect ? <CheckCircle className="h-8 w-8 text-green-500" /> : <XCircle className="h-8 w-8 text-red-500" />}
-                <span>{isCorrect ? "Correct!" : "Not quite!"}</span>
-              </div>
-              {!isCorrect && <p>The correct answer was: <strong className="text-accent">{currentRiddle.answer}</strong></p>}
-              <Button onClick={handleNext} className="bg-primary hover:bg-primary/90 text-primary-foreground" size="lg">
-                {currentRiddleIndex < riddles.length - 1 ? 'Next Riddle' : 'Next Section'}
-              </Button>
-            </div>
-          )}
-        </div>
-      </Card>
-    </div>
+            React.createElement("div", { className: "flex flex-col items-center space-y-4 p-4 rounded-lg bg-muted dark:bg-dark-muted" },
+              React.createElement("div", { className: "flex items-center gap-2 text-xl" },
+                isCorrect ? React.createElement(CheckCircle, { className: "h-8 w-8 text-green-500" }) : React.createElement(XCircle, { className: "h-8 w-8 text-red-500" }),
+                React.createElement("span", null, isCorrect ? "Correct!" : "Not quite!")
+              ),
+              !isCorrect && React.createElement("p", null, "The correct answer was: ", React.createElement("strong", { className: "text-accent" }, currentRiddle.answer)),
+              React.createElement(Button, { onClick: handleNext, className: "bg-primary hover:bg-primary/90 text-primary-foreground", size: "lg" },
+                currentRiddleIndex < riddles.length - 1 ? 'Next Riddle' : 'Next Section'
+              )
+            )
+          )
+        )
+      )
+    )
   );
 };

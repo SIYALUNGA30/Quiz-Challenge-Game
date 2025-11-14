@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
-import { ThemeProvider } from './contexts/ThemeContext';
+import App from './App.js';
+import { ThemeProvider } from './contexts/ThemeContext.js';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -10,9 +10,9 @@ if (!rootElement) {
 
 const root = ReactDOM.createRoot(rootElement);
 root.render(
-  <React.StrictMode>
-    <ThemeProvider>
-      <App />
-    </ThemeProvider>
-  </React.StrictMode>
+  React.createElement(React.StrictMode, null,
+    React.createElement(ThemeProvider, null,
+      React.createElement(App, null)
+    )
+  )
 );
