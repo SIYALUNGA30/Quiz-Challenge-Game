@@ -1,2 +1,1 @@
-// This file is intentionally left blank after converting from TypeScript.
-// The original file contained only type definitions.
+// This file is obsolete and no longer used. The project now uses plain JavaScript (.js) files.
